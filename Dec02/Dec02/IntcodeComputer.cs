@@ -3,28 +3,28 @@
 	internal class IntcodeComputer
 	{
 		private long[] memory = Array.Empty<long>();
-		private int position;
+		private int ip;
 
 		public void Run()
 		{
-			position = 0;
+			ip = 0;
 			long opcode;
 			do
 			{
-				opcode = memory[position];
+				opcode = memory[ip];
 				if (opcode == 1)
 				{
-					long operand1 = memory[memory[position + 1]];
-					long operand2 = memory[memory[position + 2]];
-					memory[memory[position + 3]] = operand1 + operand2;
-					position += 4;
+					long parameter1 = memory[memory[ip + 1]];
+					long paramter2 = memory[memory[ip + 2]];
+					memory[memory[ip + 3]] = parameter1 + paramter2;
+					ip += 4;
 				}
 				else if (opcode == 2)
 				{
-					long operand1 = memory[memory[position + 1]];
-					long operand2 = memory[memory[position + 2]];
-					memory[memory[position + 3]] = operand1 * operand2;
-					position += 4;
+					long parameter1 = memory[memory[ip + 1]];
+					long paramter2 = memory[memory[ip + 2]];
+					memory[memory[ip + 3]] = parameter1 * paramter2;
+					ip += 4;
 				}
 			} while (opcode != 99L);
 		}
