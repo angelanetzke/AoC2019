@@ -55,7 +55,23 @@
 				}
 				return 0;
 			}
-		}	
-		
+		}
+
+		public int GetShortestPath()
+		{
+			int shortest = int.MaxValue;
+			foreach (string thisMassName in allMassNames)
+			{
+				int pathToSanta = CountOrbits(thisMassName, "SAN", 0);
+				int pathToYou = CountOrbits(thisMassName, "YOU", 0);
+				int totalPathLength = pathToSanta + pathToYou;
+				if (pathToSanta > 0 && pathToYou > 0)
+				{
+					shortest = Math.Min(shortest, totalPathLength);
+				}
+			}
+			return shortest - 2;
+		}
+
 	}
 }
