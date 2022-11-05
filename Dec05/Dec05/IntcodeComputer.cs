@@ -12,6 +12,7 @@ namespace Dec05
 		public void Run()
 		{
 			instructionPointer = 0;
+			inputPointer = 0;
 			long opcode;
 			do
 			{
@@ -242,7 +243,6 @@ namespace Dec05
 		public void SetInput(long[] input)
 		{
 			this.input = input;
-			inputPointer = 0;
 		}
 
 		public void ClearOutput()
