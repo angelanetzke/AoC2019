@@ -1,11 +1,13 @@
-﻿namespace Dec05
+﻿using System.Reflection.Metadata;
+
+namespace Dec05
 {
 	internal class IntcodeComputer
 	{
 		private long[] memory = Array.Empty<long>();
-		private int instructionPointer;
+		private long instructionPointer;
 		private long[] input = Array.Empty<long>();
-		private int inputPointer;
+		private long inputPointer;
 		private List<long> output = new ();
 		public void Run()
 		{
@@ -27,6 +29,18 @@
 						break;
 					case 4:
 						SetOutput();
+						break;
+					case 5:
+						JumpIfTrue();
+						break;
+					case 6:
+						JumpIfFalse();
+						break;
+					case 7:
+						IsLessThan();
+						break;
+					case 8:
+						AreEqual();
 						break;
 				}
 			} while (opcode != 99L);
@@ -91,6 +105,128 @@
 		{
 			output.Add(memory[memory[instructionPointer + 1]]);
 			instructionPointer += 2;
+		}
+
+		private void JumpIfTrue()
+		{
+			long parameter1;
+			long parameter2;
+			if (memory[instructionPointer] / 100 % 10 == 0)
+			{
+				parameter1 = memory[memory[instructionPointer + 1]];
+			}
+			else
+			{
+				parameter1 = memory[instructionPointer + 1];
+			}
+			if (memory[instructionPointer] / 1000 % 10 == 0)
+			{
+				parameter2 = memory[memory[instructionPointer + 2]];
+			}
+			else
+			{
+				parameter2 = memory[instructionPointer + 2];
+			}
+			if (parameter1 == 0)
+			{
+				instructionPointer += 3;
+			}
+			else
+			{
+				instructionPointer = parameter2;
+			}
+		}
+
+		private void JumpIfFalse()
+		{
+			long parameter1;
+			long parameter2;
+			if (memory[instructionPointer] / 100 % 10 == 0)
+			{
+				parameter1 = memory[memory[instructionPointer + 1]];
+			}
+			else
+			{
+				parameter1 = memory[instructionPointer + 1];
+			}
+			if (memory[instructionPointer] / 1000 % 10 == 0)
+			{
+				parameter2 = memory[memory[instructionPointer + 2]];
+			}
+			else
+			{
+				parameter2 = memory[instructionPointer + 2];
+			}
+			if (parameter1 == 0)
+			{
+				instructionPointer = parameter2;
+			}
+			else
+			{
+				instructionPointer += 3;
+			}
+		}
+
+		private void IsLessThan()
+		{
+			long parameter1;
+			long parameter2;
+			if (memory[instructionPointer] / 100 % 10 == 0)
+			{
+				parameter1 = memory[memory[instructionPointer + 1]];
+			}
+			else
+			{
+				parameter1 = memory[instructionPointer + 1];
+			}
+			if (memory[instructionPointer] / 1000 % 10 == 0)
+			{
+				parameter2 = memory[memory[instructionPointer + 2]];
+			}
+			else
+			{
+				parameter2 = memory[instructionPointer + 2];
+			}
+			if (parameter1 < parameter2)
+			{
+				memory[memory[instructionPointer + 3]] = 1;
+			}
+			else
+			{
+				memory[memory[instructionPointer + 3]] = 0;
+			}			
+			instructionPointer += 4;
+		}
+
+		private void AreEqual()
+		{
+			long parameter1;
+			long parameter2;
+			if (memory[instructionPointer] / 100 % 10 == 0)
+			{
+				parameter1 = memory[memory[instructionPointer + 1]];
+			}
+			else
+			{
+				parameter1 = memory[instructionPointer + 1];
+			}
+			if (memory[instructionPointer] / 1000 % 10 == 0)
+			{
+				parameter2 = memory[memory[instructionPointer + 2]];
+			}
+			else
+			{
+				parameter2 = memory[instructionPointer + 2];
+			}
+			if (parameter1 == parameter2)
+			{
+				memory[memory[instructionPointer + 3]] = 1;
+			}
+			else
+			{
+				memory[memory[instructionPointer + 3]] = 0;
+			}
+			instructionPointer += 4;
 		}
 
 		public void SetMemory(string commands)
