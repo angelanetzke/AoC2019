@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace Dec05
+﻿namespace Dec05
 {
 	internal class IntcodeComputer
 	{
