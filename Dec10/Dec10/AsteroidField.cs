@@ -3,6 +3,9 @@
 	internal class AsteroidField
 	{
 		private readonly string[] field;
+		private (int, int) monitoringStation = (0, 0);
+		private readonly List<Direction> directions = new();
+		private int nextDirection = 0;
 
 		public AsteroidField(string[] field)
 		{
@@ -16,7 +19,13 @@
 			{
 				for (int y = 0; y < field.Length; y++)
 				{
-					max = Math.Max(max, GetAsteroidsAtLocation(x, y));
+					int asteroidsAtThisLocation = GetAsteroidsAtLocation(x, y);
+					if (asteroidsAtThisLocation > max)
+					{
+						max = asteroidsAtThisLocation;
+						monitoringStation = (x, y);
+					}
+
 				}
 			}
 			return max;
@@ -39,20 +48,12 @@
 				{
 					for (int deltaY = minDeltaY; deltaY <= maxDeltaY; deltaY++)
 					{
-						if (deltaX == 0 && deltaY == 0)
-						{
-							continue;
-						}
-						else if (!IsInLowestTerms(deltaX, deltaY))
-						{
-							continue;
-						}
-						else
+						if (IsInLowestTerms(deltaX, deltaY) && (deltaX != 0 || deltaY != 0))
 						{
 							var incrementX = deltaX;
 							var incrementY = deltaY;
 							var thisDeltaX = deltaX;
-							var thisDeltaY = deltaY;							
+							var thisDeltaY = deltaY;
 							while (0 <= x + thisDeltaX && x + thisDeltaX < field[0].Length
 								&& 0 <= y + thisDeltaY && y + thisDeltaY < field.Length)
 							{
@@ -71,6 +72,62 @@
 			}
 		}
 
+		public (int, int)? DestroyAsteroids(int count)
+		{
+			var minDeltaX = 0 - monitoringStation.Item1;
+			var maxDeltaX = field[0].Length - 1 - monitoringStation.Item1;
+			var minDeltaY = 0 - monitoringStation.Item2;
+			var maxDeltaY = field.Length - 1 - monitoringStation.Item2;
+			for (int deltaX = minDeltaX; deltaX <= maxDeltaX; deltaX++)
+			{
+				for (int deltaY = minDeltaY; deltaY <= maxDeltaY; deltaY++)
+				{
+					if (IsInLowestTerms(deltaX, deltaY) && (deltaX != 0 || deltaY != 0))
+					{
+						directions.Add(new Direction(deltaX, deltaY));
+					}
+				}
+			}
+			directions.Sort();
+			int destroyedCount = 0;
+			(int, int)? lastDestroyed = null;
+			while (destroyedCount < count)
+			{
+				var thisDestroyed = TryDestroyNext();
+				if (thisDestroyed != null)
+				{
+					lastDestroyed = thisDestroyed;
+					destroyedCount++;
+				}
+			}
+			return lastDestroyed;
+		}
+
+		private (int, int)? TryDestroyNext()
+		{ 
+			var incrementX = directions[nextDirection].GetDeltaX();
+			var incrementY = directions[nextDirection].GetDeltaY();
+			var thisDeltaX = directions[nextDirection].GetDeltaX();
+			var thisDeltaY = directions[nextDirection].GetDeltaY();
+			nextDirection = (nextDirection + 1) % directions.Count;
+			var x = monitoringStation.Item1;
+			var y = monitoringStation.Item2;
+			while (0 <= x + thisDeltaX && x + thisDeltaX < field[0].Length
+				&& 0 <= y + thisDeltaY && y + thisDeltaY < field.Length)
+			{
+				if (field[y + thisDeltaY][x + thisDeltaX] == '#')
+				{
+					
+					var thisRow = field[y + thisDeltaY].ToCharArray();
+					thisRow[x + thisDeltaX] = '.';
+					field[y + thisDeltaY] = new string(thisRow);
+					return (x + thisDeltaX, y + thisDeltaY);
+				}
+				thisDeltaX += incrementX;
+				thisDeltaY += incrementY;
+			}
+			return null;
+		}
 		private static bool IsInLowestTerms(int x, int y)
 		{
 			if (x == 0 && Math.Abs(y) == 1)
