@@ -95,14 +95,21 @@
 
 		private void GetInput()
 		{
-			memory[memory[inputPointer + 1]] = input[inputPointer];
+			memory[memory[instructionPointer + 1]] = input[inputPointer];
 			inputPointer++;
 			instructionPointer += 2;
 		}
 
 		private void SetOutput()
 		{
-			output.Add(memory[memory[instructionPointer + 1]]);
+			if (memory[instructionPointer] / 100 % 10 == 0)
+			{
+				output.Add(memory[memory[instructionPointer + 1]]);
+			}
+			else
+			{
+				output.Add(memory[instructionPointer + 1]);
+			}			
 			instructionPointer += 2;
 		}
 
