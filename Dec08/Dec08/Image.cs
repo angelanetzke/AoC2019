@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Dec08
 {
@@ -26,6 +27,36 @@ namespace Dec08
 		public int CountDigits(int layer, int digit)
 		{
 			return Regex.Matches(data[layer], digit.ToString()).Count;
+		}
+
+		public override string ToString()
+		{
+			var builder = new StringBuilder();
+			for (int pixel = 0; pixel < data[0].Length; pixel++)
+			{
+				for (int layer = 0; layer < data.Length; layer++)
+				{
+					var thisPixel = data[layer][pixel];
+					if (thisPixel == '0')
+					{
+						builder.Append(' ');
+						break;
+					}
+					if (thisPixel == '1')
+					{
+						builder.Append('#');
+						break;
+					}
+				}
+			}
+			var singleLine = builder.ToString();
+			builder.Clear();
+			for (int row = 0; row < HEIGHT; row++)
+			{
+				builder.Append(singleLine.Substring(row * WIDTH, WIDTH));
+				builder.Append('\n');
+			}
+			return builder.ToString();
 		}
 
 	}

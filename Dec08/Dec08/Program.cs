@@ -2,6 +2,7 @@
 
 var inputLine = File.ReadAllText("input.txt");
 Part1(inputLine);
+Part2(inputLine);
 
 static void Part1(string inputLine)
 {
@@ -21,3 +22,8 @@ static void Part1(string inputLine)
 	Console.WriteLine($"Part 1: {answer}");
 }
 
+static void Part2(string inputLine)
+{
+	var theImage = new Image(inputLine);
+	Console.WriteLine(theImage);
+}
