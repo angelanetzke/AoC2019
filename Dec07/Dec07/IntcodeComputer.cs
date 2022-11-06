@@ -1,7 +1,4 @@
-﻿using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-
-namespace Dec07
+﻿namespace Dec07
 {
 	internal class IntcodeComputer
 	{
@@ -10,8 +7,11 @@ namespace Dec07
 		private readonly List<long> input = new ();
 		private int inputPointer = 0;
 		private readonly List<long> output = new ();
-		public void Run()
+		public enum EXIT_REASON { HALT, PAUSE };
+		bool isPaused = false;
+		public EXIT_REASON Run()
 		{
+			isPaused = false;
 			long opcode;
 			do
 			{
@@ -29,6 +29,7 @@ namespace Dec07
 						break;
 					case 4:
 						SetOutput();
+						isPaused = true;
 						break;
 					case 5:
 						JumpIfTrue();
@@ -43,7 +44,15 @@ namespace Dec07
 						AreEqual();
 						break;
 				}
-			} while (opcode != 99L);
+			} while (opcode != 99L && !isPaused);
+			if (isPaused)
+			{
+				return EXIT_REASON.PAUSE;
+			}
+			else
+			{
+				return EXIT_REASON.HALT;
+			}
 		}
 
 		private void Add()
