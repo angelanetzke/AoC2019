@@ -70,6 +70,16 @@ namespace Dec12
 			return GetPotentialEnergy() * GetKineticEnergy();
 		}
 
+		public (long, long, long) GetLocation()
+		{
+			return location;
+		}
+
+		public (long, long, long) GetVelocity()
+		{
+			return velocity;
+		}
+
 
 	}
 }

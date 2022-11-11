@@ -2,6 +2,7 @@
 
 var allLines = File.ReadAllLines("input.txt");
 Part1(allLines);
+Part2(allLines);
 
 static void Part1(string[] allLines)
 {
@@ -31,4 +32,21 @@ static void Part1(string[] allLines)
 		totalEnergy += thisMoon.GetTotalEnergy();
 	}
 	Console.WriteLine($"Part 1: {totalEnergy}");
+}
+
+static void Part2(string[] allLines)
+{
+	var allMoons = new List<Moon>();
+	foreach (string thisLine in allLines)
+	{
+		allMoons.Add(new Moon(thisLine));
+	}
+	var theSystem = new MoonSystem(allMoons);
+	bool isComplete = false;
+	while (!isComplete)
+	{
+		theSystem.NextStep();
+		isComplete = theSystem.IsComplete();
+	}
+	Console.WriteLine($"Part 2: {theSystem.GetLCM()}");
 }
