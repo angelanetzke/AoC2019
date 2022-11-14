@@ -1,2 +1,2 @@
 # Advent of Code 2019 #
-These are my C# with .NET 6 solutions for Advent of Code 2019, developed with Visual Studio. [Advent of Code](https://adventofcode.com/ "Advent of Code") is an annual set of programming challenges, with a new two-oart challenge releaseing each day. 
+These are my C# with .NET 6 solutions for Advent of Code 2019, developed with Visual Studio. [Advent of Code](https://adventofcode.com/ "Advent of Code") is an annual set of programming challenges, with a new two-part challenge releaseing each day. 
