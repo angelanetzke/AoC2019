@@ -8,10 +8,18 @@
 		private int inputPointer;
 		private List<long> output = new();
 		private long relativeBase = 0L;
+		private bool isPaused = false;
 		public void Run()
 		{
-			instructionPointer = 0;
-			inputPointer = 0;
+			if (isPaused)
+			{
+				isPaused = false;
+			}
+			else
+			{
+				instructionPointer = 0;
+				inputPointer = 0;
+			}
 			long opcode;
 			do
 			{
@@ -46,7 +54,7 @@
 						SetRelativeBase();
 						break;
 				}
-			} while (opcode != 99L);
+			} while (opcode != 99L && !isPaused);
 		}
 
 		private void Add()
@@ -67,9 +75,16 @@
 
 		private void GetInput()
 		{
-			memory[GetAddress(1)] = input[inputPointer];
-			inputPointer++;
-			instructionPointer += 2;
+			if (inputPointer >= input.Count)
+			{
+				isPaused = true;
+			}
+			else
+			{
+				memory[GetAddress(1)] = input[inputPointer];
+				inputPointer++;
+				instructionPointer += 2;
+			}
 		}
 
 		private void SetOutput()
@@ -174,9 +189,9 @@
 			}
 		}
 
-		public void AddInput(long newTnput)
+		public void AddInput(long newInput)
 		{
-			input.Add(newTnput);
+			input.Add(newInput);
 		}
 
 		public void ClearOutput()
@@ -204,7 +219,12 @@
 				return 0L;
 			}
 		}
-	}
 
+		public bool IsPaused()
+		{
+			return isPaused;
+		}
+
+	}
 }
 
